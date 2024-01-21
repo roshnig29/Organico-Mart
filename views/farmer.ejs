@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Login Form</title>
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+     </head>
+     <body>
+        <section class="header">
+            <img class="video-background" src="https://www.timeskuwait.com/news/wp-content/uploads/2019/06/fruit-1068x736.jpg"></img> 
+        <h1 style="color: rgb(34,3,3);"><%= title%></h1>
+        <div class="container" id="main">
+            <div class="sign-up">
+                <form action="/f_register" method="post">
+                    <h1> Create  Account</h1>
+                    <div class="social-container">
+                        <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+                        <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                    <p>or use your email for registration</p>
+                    <input type="text" name="name" placeholder="Name" required="">
+                    <input type="email" name="email" placeholder="Email" required="">
+                    <input type="password" name="password" placeholder="Password" required="">
+                    <button>Sign-Up</button>
+                </form>
+            </div>
+            <div class="signin">
+                <form method="post" action="/f_login">
+                    <h1> Sign in</h1>
+                    <div class="social-container">
+                        <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+                        <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                    <p>or use your account</p>
+                    <input type="email" name="email" placeholder="Email" required="">
+                    <input type="password" name="password" placeholder="Password" required="">
+                    <a href="#">Forgot Password </a>
+                    <button>Sign-In</button>
+                </form>
+            </div>
+            <div class="overlay-container">
+                <div class="overlay">
+                    <div class="overlay-left">
+                        <h1> Welcome Back !</h1>
+                        <p> To keep connected with us please login with your personal information</p>
+                        <button id="signin">Sign-In</button>
+                    </div>
+                    <div class="overlay-right">
+                        <h1> Hello,Friend !</h1>
+                        <p> Enter your personal details and stay connected wih us</p>
+                        <button id="signup">Sign-Up</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        </section>
+        <script type="text/javascript">
+            const signupButton=document.getElementById('signup');
+            const signinButton=document.getElementById('signin');
+            const main=document.getElementById('main');
+            signupButton.addEventListener('click',() => {
+                main.classList.add("right-panel-active");
+            });
+            signinButton.addEventListener('click',()=>{
+                main.classList.remove("right-panel-active");
+            });
+        </script>
+     </body>
+</html>

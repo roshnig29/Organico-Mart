@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>My Cart</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="css/styles.css" rel="stylesheet" />
+</head>
+
+<body>
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container px-4 px-lg-5">
+            <a class="navbar-brand" href="#!">Organico</a>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+            </div>
+        </div>
+    </nav>
+    <!-- Header-->
+    <header class="bg-dark py-5">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-white">
+                <h1 class="display-4 fw-bolder">Cart</h1>
+                <p class="lead fw-normal text-white-50 mb-0">Fresh baskets at your doorstep!</p>
+            </div>
+        </div>
+    </header>
+    <!-- Section-->
+    <section class="py-5">
+        <div class="container px-4 px-lg-5 mt-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="cart"></div>
+                <div id="total"></div>
+            </div>
+        </div>
+    </section>
+
+    <form class="form-control">
+        <div class ="row-cols-auto offset-sm-5" >
+        <input type="text" class="form-control" name="your-name" placeholder="Your Name" /><p></p>
+        <input type="email" class="form-control" name="your-email" placeholder="Your Email" /><p></p>
+        <input type="text" class="form-control" name="your-address" placeholder="Enter Delivery Address" required/><p></p>
+        <select id="ticket-type" name="ticket-type" class="form-select" required>
+            <option value="">-- Select Your Mode of Payment --</option>
+            <option value="standard-access">Credit Card</option>
+            <option value="pro-access">Cash on Delivery</option>
+            <option value="premium-access">UPI ID</option>
+        </select><p></p>
+    </div>
+    <button class="btn btn-outline-dark offset-sm-9 mb-5" id="buy" onclick="BuyNow()">
+        <i class="bi-cart-fill me-1"></i>
+        Buy Now
+        <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+        
+    </button>
+    <div id = "date" class="offset-sm-8" ></div>
+    </form>
+    <!---->
+    <footer class="py-5 bg-dark">
+        <div class="container">
+            <p class="m-0 text-center text-white">Copyright &copy; Organico HIRH 2022</p>
+        </div>
+    </footer>
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script crossdomain src="https://unpkg.com/react@16/umd/react.development.js ">
+    </script>
+    <script crossdomain src="https://unpkg.com/react-dom@16/umd/react-dom.development.js">
+    </script>
+    <script crossdomain src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js ">
+    </script>
+    <!-- Core theme JS-->
+    <script type="text/babel">
+        //<script src="js/scripts.js">
+        var des = document.querySelector(".cart");
+        class MyTitle extends React.Component {
+            render() {
+                return (
+                    <h3>{this.props.title}</h3>
+                );
+            }
+        }
+        class MyImg extends React.Component {
+            render() {
+                return (
+                    <img class="card-img-top" src={this.props.src} />
+                );
+            }
+        }
+        class Desc extends React.Component {
+            render() {
+                return (
+                    <p>{this.props.desc}</p>
+                );
+            }
+        }
+        class Price extends React.Component {
+            render() {
+                return (
+                    <h3>₹ {this.props.price} /-</h3>
+                );
+            }
+        }
+        var total = 0.0;
+        function Total(total, add) {
+            total = total + add;
+            ReactDOM.render(
+                <h4>Total: {total}</h4>,
+                document.querySelector("#total"))
+            return total;
+
+        }
+        function Total2(total, add) {
+            total = total - add;
+            ReactDOM.render(
+                <h4>Total: {total}</h4>,
+                document.querySelector("#total"))
+            return total;
+
+        }
+
+        class Quantity extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    count: 0,
+                };
+
+                this.increase = (e) => {
+                    this.setState({
+                        count: this.state.count + 1,
+                    }
+                    );
+                    total = Total(total, parseFloat(this.props.price))
+                }
+                this.decrease = (e) => {
+                    if (this.state.count == 0)
+                        return;
+                    this.setState({
+                        count: this.state.count - 1,
+                    }
+                    );
+                    total = Total2(total, parseFloat(this.props.price))
+                }
+            }
+            render() {
+                return (
+                    <div>
+                        <p class="card align-items-xl-stretch ">
+                            <span class="fw-bolder card-footer">Quantity</span>
+                            <button class="btn btn-outline-dark mt-auto" onClick={this.decrease}> - </button>
+                            <span class="card-footer .align-content-xl-between fw-bolder">{this.state.count}</span>
+                            <button class="btn btn-outline-dark mt-auto" onClick={this.increase}> + </button>
+                        </p>
+                    </div>
+                );
+            }
+        }
+        class Item extends React.Component {
+            render() {
+                return (
+                    <div key="items">
+                        <div class="card h-100">
+                            <MyImg {...this.props} />
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <MyTitle {...this.props} />
+                                    <Desc {...this.props} />
+                                    <Price {...this.props} />
+                                </div>
+                            </div>
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="card-body">
+                                    <Quantity {...this.props} />
+                                </div>
+                            </div> </div>
+                    </div>
+                );
+            }
+        }
+        function ItemList(props) {
+            let names = props.names;
+            const listItems = names.map((name, index) =>
+                <li key={index}>{name}</li>
+            );
+            return (
+                <ul class="list-group-item-success">{listItems}</ul>
+            )
+        }
+        //Example
+        const item1 = <Item title="Tomato" src="tomato.jpg" desc=" Local, Organically Grown (Loose), 1 kg " price="33.53" />
+        const item2 = <Item title="Capsicum" src="capsicum.jpg" desc="Green (Loose), 1 kg " price="82.00" />
+        const item3 = <Item title="Carrot" src="carrot.jpg" desc="Orange (Loose), 500 g" price="36.25" />
+        ReactDOM.render(
+            <ItemList names={[item1, item2, item3]} />,
+            des
+        );
+
+
+        class Clock extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    date: new Date(),
+                    exp_date: new Date()
+                };
+            }
+            componentWillMount() {
+                this.state.exp_date.setHours(this.state.exp_date.getHours() + 3);
+            }
+            render() {
+                return (
+                    <div>
+                        <h6> Order time : {this.state.date.toLocaleDateString('en-GB',
+                            { hour: 'numeric', minute: 'numeric', second: 'numeric'})}</h6>
+                        <h5>Expected Delivery Time: {this.state.exp_date.toLocaleDateString('en-GB',
+                            { hour: 'numeric', minute: 'numeric', second: 'numeric' })}</h5>
+                        
+                    </div>
+                )
+            }
+        }
+        
+
+        function BuyNow() {
+            alert("Order has been placed");
+            ReactDOM.render(
+                <div><Clock /></div>,
+                document.querySelector("#date")
+            )   
+        }
+        object = document.getElementById("buy");
+        object.addEventListener("click", BuyNow);
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Dashboard</title>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            padding: 20px;
+        }
+
+        .card {
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            margin: 10px;
+            padding: 20px;
+            width: 300px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        h3, p {
+            margin: 0;
+        }
+
+        h3 {
+            color: #343a40;
+        }
+
+        p {
+            color: #6c757d;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        form input {
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 style="text-align: center;">Dashboard</h1>
+
+    <!-- Display items from the MongoDB collection -->
+    <div class="container">
+        <% items.forEach(item => { %>
+            <div class="card">
+                <img src="<%= item.src || 'https://via.placeholder.com/300x200' %>" alt="<%= item.title %>" />
+                <h3><%= item.title %></h3>
+                <p><%= item.desc %></p>
+                <form class="updateForm" action="/updateItem" method="POST"> <!-- Added form action and method -->
+                    <input type="hidden" name="itemId" value="<%= item._id %>" /> <!-- Added hidden input for item ID -->
+                    <input type="text" name="newPrice" placeholder="New Price" required />
+                    <input type="number" name="quantityToAdd" placeholder="Quantity to Add" required />
+                    <button type="submit">Update</button>
+                </form>
+                <p>Price: <%= item.price %> /-</p>
+                <p>Quantity: <%= item.quantity %></p>
+            </div>
+        <% }); %>
+    </div>
+
+    <script>
+        // Your JavaScript code can go here
+    </script>
+</body>
+
+</html>

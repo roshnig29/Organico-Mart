@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>My Cart</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="css/cart.css" rel="stylesheet" />
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container px-4 px-lg-5">
+            <a class="navbar-brand" href="#!">Organico</a>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent"></div>
+        </div>
+    </nav>
+    <!-- Header -->
+    <header class="bg-dark py-5">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-white">
+                <h1 class="display-4 fw-bolder">Cart</h1>
+                <p class="lead fw-normal text-white-50 mb-0">Fresh baskets at your doorstep!</p>
+            </div>
+        </div>
+    </header>
+    <!-- Section -->
+    <section class="py-5">
+        <div class="container px-4 px-lg-5 mt-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="cart">
+                    <% items.forEach(item => { %>
+                        <div key="<%= item._id %>">
+                            <div class="card h-100">
+                                <img class="card-img-top" src="<%= item.src || 'https://via.placeholder.com/300x200' %>" alt="<%= item.title %>" />
+                                <div class="card-body p-4">
+                                    <div class="text-center">
+                                        <h3><%= item.title %></h3>
+                                        <p><%= item.desc %></p>
+                                        <h3>₹ <%= item.price %> /-</h3>
+                                        <div class="quantity-total">
+                                            <!-- Quantity input fields for each item -->
+                                            <p class="card align-items-xl-stretch">
+                                                <span class="fw-bolder card-footer">Quantity</span>
+                                                <button class="btn btn-outline-dark mt-auto" onclick="decreaseQuantity('<%= item._id %>', <%= item.price %>)"> - </button>
+                                                <span class="card-footer .align-content-xl-between fw-bolder" id="<%= item._id %>">0</span>
+                                                <button class="btn btn-outline-dark mt-auto" onclick="increaseQuantity('<%= item._id %>', <%= item.price %>)"> + </button>
+                                                <!-- Display Total for this item -->
+                                                <p id="total-<%= item._id %>">Total: ₹ 0.00 /-</p>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+                <div id="total"></div>
+                <button class="btn btn-outline-dark mt-auto" onclick="calculateGrandTotal()">Calculate Total</button>
+                <p id="grand-total">Grand Total: ₹ 0.00 /-</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Form -->
+    <form class="form-control">
+        <div class="row-cols-auto offset-sm-5">
+            <input type="text" class="form-control" name="your-name" placeholder="Your Name" /><p></p>
+            <input type="email" class="form-control" name="your-email" placeholder="Your Email" /><p></p>
+            <input type="text" class="form-control" name="your-address" placeholder="Enter Delivery Address" required/><p></p>
+            <select id="ticket-type" name="ticket-type" class="form-select" required>
+                <option value="">-- Select Your Mode of Payment --</option>
+                <option value="standard-access">Credit Card</option>
+                <option value="pro-access">Cash on Delivery</option>
+                <option value="premium-access">UPI ID</option>
+            </select><p></p>
+        </div>
+        <button class="btn btn-outline-dark offset-sm-9 mb-5" id="buy" onclick="BuyNow()">
+            <i class="bi-cart-fill me-1"></i>
+            Buy Now
+            <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+        </button>
+        <div id="date" class="offset-sm-8"></div>
+    </form>
+
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+        <div class="container">
+            <p class="m-0 text-center text-white">Copyright &copy; Organico HIRH 2022</p>
+        </div>
+    </footer>
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <!-- Core theme JS-->
+    <script type="text/babel">
+        var quantities = {}; // Object to store quantities for each item
+        var total = 0.0; // Variable to store the total amount
+
+        function increaseQuantity(itemId, price) {
+            // Increase quantity for the specified item
+            if (!quantities[itemId]) quantities[itemId] = 0;
+            quantities[itemId]++;
+            updateQuantity(itemId, price);
+            updateTotal();
+        }
+
+        function decreaseQuantity(itemId, price) {
+            // Decrease quantity for the specified item
+            if (quantities[itemId] > 0) quantities[itemId]--;
+            updateQuantity(itemId, price);
+            updateTotal();
+        }
+
+        function updateQuantity(itemId, price) {
+            // Update the displayed quantity for the specified item
+            document.getElementById(itemId).textContent = quantities[itemId];
+
+            // Update the total for the specified item
+            var itemTotal = quantities[itemId] * price;
+            document.getElementById("total-" + itemId).textContent = "₹ " + itemTotal.toFixed(2) + " /-";
+        }
+
+        function updateTotal() {
+            // Update the total amount for all items
+            total = Object.values(quantities).reduce((acc, qty) => acc + qty, 0);
+            document.getElementById("total").textContent = "Total: ₹ " + total.toFixed(2) + " /-";
+        }
+
+        function calculateGrandTotal() {
+            // Calculate and display the grand total
+            var grandTotal = total * 100; // Placeholder calculation
+            document.getElementById("grand-total").textContent = "Grand Total: ₹ " + grandTotal.toFixed(2) + " /-";
+        }
+
+        class Clock extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    date: new Date(),
+                    exp_date: new Date(),
+                };
+            }
+            componentWillMount() {
+                this.state.exp_date.setHours(this.state.exp_date.getHours() + 3);
+            }
+            render() {
+                return (
+                    <div>
+                        <h6> Order time : {this.state.date.toLocaleDateString('en-GB', { hour: 'numeric', minute: 'numeric', second: 'numeric' })}</h6>
+                        <h5>Expected Delivery Time: {this.state.exp_date.toLocaleDateString('en-GB', { hour: 'numeric', minute: 'numeric', second: 'numeric' })}</h5>
+                    </div>
+                );
+            }
+        }
+
+        function BuyNow(event) {
+    event.preventDefault(); // Prevent the default form submission behavior
+    alert("Order has been placed");
+    ReactDOM.render(<div><Clock /></div>, document.querySelector("#date"));
+}
+
+var buyButton = document.getElementById("buy");
+buyButton.addEventListener("click", BuyNow);
+    </script>
+</body>
+
+</html>
