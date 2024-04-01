@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Payment</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="css/cart.css" rel="stylesheet" />
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container px-4 px-lg-5">
+            <a class="navbar-brand" href="/login">Organico</a>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent"></div>
+        </div>
+    </nav>
+    <!-- Header -->
+    <header class="bg-dark py-5">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-white">
+                <h1 class="display-4 fw-bolder">Payment</h1>
+                <p class="lead fw-normal text-white-50 mb-0">Fresh baskets at your doorstep!</p>
+            </div>
+        </div>
+    </header>
+    <!-- Section -->
+    <h3 class="offset-sm-3">YOUR TOTAL IS <%= total %></h3>
+    <!-- Form -->
+    <form class="form-control">
+    <div class="row-cols-auto offset-sm-3">
+        <input type="text" class="form-control" name="your-name" placeholder="Your Name" />
+        <p></p>
+        <input type="email" class="form-control" name="your-email" placeholder="Your Email" />
+        <p></p>
+        <input type="text" class="form-control" name="your-address" placeholder="Enter Delivery Address" required />
+        <p></p>
+        <select id="ticket-type" name="ticket-type" class="form-select" required>
+            <option value="">-- Select Your Mode of Payment --</option>
+            <option value="standard-access">Credit Card</option>
+            <option value="pro-access">Cash on Delivery</option>
+            <option value="premium-access">UPI ID</option>
+        </select>
+        <p></p>
+    </div>
+    <button class="btn btn-outline-dark offset-sm-9 mb-5" id="buy" onclick="placeOrder()">
+        <i class="bi-cart-fill me-1">Place Order</i>
+        <span class="badge bg-dark text-white ms-1 rounded-pill">:)</span>
+    </button>
+    <div id="date" class="offset-sm-8"></div>
+    </form>
+
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+        <div class="container">
+            <p class="m-0 text-center text-white">Copyright &copy; Organico HIRH 2022</p>
+        </div>
+    </footer>
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Your app.js script -->
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script type = "text/babel">
+        function placeOrder() {
+            event.preventDefault(); // Prevent the default form submission behavior
+            alert("Order has been placed");
+            ReactDOM.render(<div><Clock /></div>, document.querySelector("#date"));
+        }
+
+        class Clock extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    date: new Date(),
+                    exp_date: new Date(),
+                };
+            }
+            componentWillMount() {
+                this.state.exp_date.setHours(this.state.exp_date.getHours() + 3);
+            }
+            render() {
+                return (
+                    <div>
+                        <h6> Order time : {this.state.date.toLocaleDateString('en-GB', { hour: 'numeric', minute: 'numeric', second: 'numeric' })}</h6>
+                        <h5>Expected Delivery Time: {this.state.exp_date.toLocaleDateString('en-GB', { hour: 'numeric', minute: 'numeric', second: 'numeric' })}</h5>
+                    </div>
+                );
+            }
+        }
+
+
+
+    </script>
+</body>
+
+</html>

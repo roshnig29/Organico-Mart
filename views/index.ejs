@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Shopping</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="css/cart.css" rel="stylesheet" />
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container px-4 px-lg-5">
+            <a class="navbar-brand" href="/login">Organico</a>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent"></div>
+        </div>
+    </nav>
+    <!-- Header -->
+    <header class="bg-dark py-5">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-white">
+                <h1 class="display-4 fw-bolder">Shopping</h1>
+                <p class="lead fw-normal text-white-50 mb-0">Fresh baskets at your doorstep!</p>
+            </div>
+        </div>
+    </header>
+    <!-- Section -->
+    <section class="py-5">
+        <div class="container px-4 px-lg-5 mt-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="items_available">
+                    <% items.forEach(item=> { %>
+                        <% if (item.quantity> 0) { %>
+                            <div key="<%= item._id %>">
+                                <div class="card h-100">
+                                    <img class="card-img-top"
+                                        src="<%= item.src || 'https://via.placeholder.com/300x200' %>"
+                                        alt="<%= item.title %>" />
+                                    <div class="card-body p-4">
+                                        <div class="text-center">
+                                            <h3>
+                                                <%= item.title %>
+                                            </h3>
+                                            <p>
+                                                <%= item.desc %>
+                                            </p>
+                                            <h3>₹ <%= item.price %> /-</h3>
+                                            <div class="quantity-total">
+                                                <!-- Quantity input fields for each item -->
+                                                <p class="card align-items-xl-stretch">
+                                                    <span class="fw-bolder card-footer" id="status-<%= item._id %>">Not in Cart</span>
+                                                    <button class="btn btn-outline-dark mt-auto"
+                                                        onclick="addToList('<%= item._id %>')">
+                                                        Add to cart</button>
+                                                    <button class="btn btn-outline-dark mt-auto"
+                                                        onclick="removeFromList('<%= item._id %>')">
+                                                        Remove from cart </button>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <% } %>
+                                <% }); %>
+                </div>
+            </div>
+        </div>
+    </section>
+    <form id="cartForm" action="/cart" method="POST">
+        <input type="hidden" name="list" id="listInput" />
+
+        <button class="btn btn-primary offset-sm-9 mb-5" type="submit" onclick="showCart()">Show Cart</button>
+    </form>
+    
+
+    
+
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+        <div class="container">
+            <p class="m-0 text-center text-white">Copyright &copy; Organico HIRH 2022</p>
+        </div>
+    </footer>
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Your app.js script -->
+    <script>
+
+    var list = []; 
+
+    function addToList(itemId) {
+        list.push(itemId); // Add the itemId to the end of the list array
+        document.getElementById('status-'+itemId).textContent = "Added to cart";
+    }
+
+    function removeFromList(itemId) {
+        var index = list.indexOf(itemId); // Find the index of the itemId in the list array
+        if (index !== -1) {
+            list.splice(index, 1); // Remove the item at the found index
+        }
+        document.getElementById('status-'+itemId).textContent = "Removed from cart";
+    }
+        function showCart() {
+            var listJson = JSON.stringify(list);
+
+            // Set the JSON strings as input values
+            document.getElementById('listInput').value = listJson;
+
+            // Submit the form
+            document.getElementById('cartForm').submit();
+        }
+    </script>
+</body>
+
+</html>

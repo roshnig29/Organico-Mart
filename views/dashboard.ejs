@@ -74,6 +74,15 @@
             border-radius: 5px;
             cursor: pointer;
         }
+        .href_{
+            padding: 10px;
+            background-color: #0e2136;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            margin-left: 45%;
+            cursor: pointer;
+        }
 
         button:hover {
             background-color: #0056b3;
@@ -83,6 +92,8 @@
 
 <body>
     <h1 style="text-align: center;">Dashboard</h1>
+    <a class="href_" href="/addItem">Add item</a>
+
 
     <!-- Display items from the MongoDB collection -->
     <div class="container">
@@ -102,7 +113,7 @@
             </div>
         <% }); %>
     </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // Your JavaScript code can go here
     </script>

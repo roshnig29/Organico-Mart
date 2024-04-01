@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Payment</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="css/cart.css" rel="stylesheet" />
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container px-4 px-lg-5">
+            <a class="navbar-brand" href="/login">Organico</a>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent"></div>
+        </div>
+    </nav>
+    <!-- Header -->
+    <header class="bg-dark py-5">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-white">
+                <h1 class="display-4 fw-bolder">Payment</h1>
+                <p class="lead fw-normal text-white-50 mb-0">Fresh baskets at your doorstep!</p>
+            </div>
+        </div>
+    </header>
+    <!-- Section -->
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-lg-6">
+                <h3 class="mb-4">YOUR ORDER HAS BEEN PLACED SUCCESSFULLY</h3>
+                <p>It will be delivered shortly</p>
+                <p>Please rate your experience:</p>
+                <form method = "POST" action = "/rating">
+                    <input type="number" min="1" max="10" placeholder="Rate your experience (1-10)" class="form-control mb-3">
+                    <button type="submit" class="btn btn-primary m-2">Submit Review</button>
+                </form>
+                <a href="/login" class="btn btn-secondary m-2">Home</a>
+            </div>
+        </div>
+    </div>
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+        <div class="container">
+            <p class="m-0 text-center text-white">Copyright &copy; Organico HIRH 2022</p>
+        </div>
+    </footer>
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Your app.js script -->
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script type = "text/babel">
+        function placeOrder() {
+            event.preventDefault(); // Prevent the default form submission behavior
+            alert("Order has been placed");
+            ReactDOM.render(<div><Clock /></div>, document.querySelector("#date"));
+        }
+
+        class Clock extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    date: new Date(),
+                    exp_date: new Date(),
+                };
+            }
+            componentWillMount() {
+                this.state.exp_date.setHours(this.state.exp_date.getHours() + 3);
+            }
+            render() {
+                return (
+                    <div>
+                        <h6> Order time : {this.state.date.toLocaleDateString('en-GB', { hour: 'numeric', minute: 'numeric', second: 'numeric' })}</h6>
+                        <h5>Expected Delivery Time: {this.state.exp_date.toLocaleDateString('en-GB', { hour: 'numeric', minute: 'numeric', second: 'numeric' })}</h5>
+                    </div>
+                );
+            }
+        }
+
+
+
+    </script>
+</body>
+
+</html>

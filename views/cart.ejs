@@ -19,7 +19,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container px-4 px-lg-5">
-            <a class="navbar-brand" href="#!">Organico</a>
+            <a class="navbar-brand" href="/login">Organico</a>
             <div class="collapse navbar-collapse" id="navbarSupportedContent"></div>
         </div>
     </nav>
@@ -50,9 +50,9 @@
                                             <!-- Quantity input fields for each item -->
                                             <p class="card align-items-xl-stretch">
                                                 <span class="fw-bolder card-footer">Quantity</span>
-                                                <button class="btn btn-outline-dark mt-auto" onclick="decreaseQuantity('<%= item._id %>', <%= item.price %>)"> - </button>
+                                                <button class="btn btn-outline-dark mt-auto" onclick="decreaseQuantity('<%= item._id %>', '<%= item.price %>')"> - </button>
                                                 <span class="card-footer .align-content-xl-between fw-bolder" id="<%= item._id %>">0</span>
-                                                <button class="btn btn-outline-dark mt-auto" onclick="increaseQuantity('<%= item._id %>', <%= item.price %>)"> + </button>
+                                                <button class="btn btn-outline-dark mt-auto" onclick="increaseQuantity('<%= item._id %>', '<%= item.price %>')"> + </button>
                                                 <!-- Display Total for this item -->
                                                 <p id="total-<%= item._id %>">Total: ₹ 0.00 /-</p>
                                             </p>
@@ -71,22 +71,12 @@
     </section>
 
     <!-- Form -->
-    <form class="form-control">
-        <div class="row-cols-auto offset-sm-5">
-            <input type="text" class="form-control" name="your-name" placeholder="Your Name" /><p></p>
-            <input type="email" class="form-control" name="your-email" placeholder="Your Email" /><p></p>
-            <input type="text" class="form-control" name="your-address" placeholder="Enter Delivery Address" required/><p></p>
-            <select id="ticket-type" name="ticket-type" class="form-select" required>
-                <option value="">-- Select Your Mode of Payment --</option>
-                <option value="standard-access">Credit Card</option>
-                <option value="pro-access">Cash on Delivery</option>
-                <option value="premium-access">UPI ID</option>
-            </select><p></p>
-        </div>
-        <button class="btn btn-outline-dark offset-sm-9 mb-5" id="buy" onclick="BuyNow()">
+    <form class="form-control" id = "paynow" method="POST" action="/payment">
+        <input type="hidden" name="total" id="totalInput" />
+        <button class="btn btn-outline-dark offset-sm-9 mb-5" id="buy" type = "submit" onclick="BuyNow()">
             <i class="bi-cart-fill me-1"></i>
             Buy Now
-            <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+            <span class="badge bg-dark text-white ms-1 rounded-pill">:)</span>
         </button>
         <div id="date" class="offset-sm-8"></div>
     </form>
@@ -106,12 +96,14 @@
     <script type="text/babel">
         var quantities = {}; // Object to store quantities for each item
         var total = 0.0; // Variable to store the total amount
+        var grandTotal = 0.0
 
         function increaseQuantity(itemId, price) {
             // Increase quantity for the specified item
             if (!quantities[itemId]) quantities[itemId] = 0;
             quantities[itemId]++;
             updateQuantity(itemId, price);
+            total = total+parseFloat(price)
             updateTotal();
         }
 
@@ -119,6 +111,7 @@
             // Decrease quantity for the specified item
             if (quantities[itemId] > 0) quantities[itemId]--;
             updateQuantity(itemId, price);
+            total = total - parseFloat(price)
             updateTotal();
         }
 
@@ -133,45 +126,22 @@
 
         function updateTotal() {
             // Update the total amount for all items
-            total = Object.values(quantities).reduce((acc, qty) => acc + qty, 0);
-            document.getElementById("total").textContent = "Total: ₹ " + total.toFixed(2) + " /-";
+            // total = Object.values(quantities).reduce((acc, qty) => acc + qty, 0);
+            document.getElementById("total").textContent = "SubTotal: ₹ " + total.toFixed(2) + " /-";
         }
 
         function calculateGrandTotal() {
             // Calculate and display the grand total
-            var grandTotal = total * 100; // Placeholder calculation
+            var tax = total*0.05;// Placeholder calculation
+            grandTotal = total + tax
             document.getElementById("grand-total").textContent = "Grand Total: ₹ " + grandTotal.toFixed(2) + " /-";
         }
-
-        class Clock extends React.Component {
-            constructor(props) {
-                super(props);
-                this.state = {
-                    date: new Date(),
-                    exp_date: new Date(),
-                };
-            }
-            componentWillMount() {
-                this.state.exp_date.setHours(this.state.exp_date.getHours() + 3);
-            }
-            render() {
-                return (
-                    <div>
-                        <h6> Order time : {this.state.date.toLocaleDateString('en-GB', { hour: 'numeric', minute: 'numeric', second: 'numeric' })}</h6>
-                        <h5>Expected Delivery Time: {this.state.exp_date.toLocaleDateString('en-GB', { hour: 'numeric', minute: 'numeric', second: 'numeric' })}</h5>
-                    </div>
-                );
-            }
+        function BuyNow(){
+            var totalJson = JSON.stringify(grandTotal);
+            document.getElementById('totalInput').value = totalJson;
+            document.getElementById('paynow').submit();
         }
 
-        function BuyNow(event) {
-    event.preventDefault(); // Prevent the default form submission behavior
-    alert("Order has been placed");
-    ReactDOM.render(<div><Clock /></div>, document.querySelector("#date"));
-}
-
-var buyButton = document.getElementById("buy");
-buyButton.addEventListener("click", BuyNow);
     </script>
 </body>
 
